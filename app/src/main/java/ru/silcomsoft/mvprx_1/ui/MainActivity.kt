@@ -1,4 +1,4 @@
-package ru.silcomsoft.mvprx_1.view
+package ru.silcomsoft.mvprx_1.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,26 +7,37 @@ import ru.silcomsoft.mvprx_1.R
 import ru.silcomsoft.mvprx_1.databinding.ActivityMainBinding
 import ru.silcomsoft.mvprx_1.presenter.CounterType
 import ru.silcomsoft.mvprx_1.presenter.MainPresenter
+import ru.silcomsoft.mvprx_1.view.IMainView
 import java.lang.IllegalStateException
 
 class MainActivity : AppCompatActivity(), IMainView {
 
     private var vb: ActivityMainBinding? = null
-    private val presenter = MainPresenter(this)
+    private var presenter: MainPresenter? = null
+
+    override fun onStop() {
+        presenter = null
+        super.onStop()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        presenter = MainPresenter(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vb = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vb?.root)
 
-        val listener = View.OnClickListener {
-            val type = when (it.id) {
+        val listener = View.OnClickListener { view ->
+            val type = when (view.id) {
                 R.id.btn_counter1 -> CounterType.FIRST
                 R.id.btn_counter2 -> CounterType.SECOND
                 R.id.btn_counter3 -> CounterType.THIRD
                 else -> throw IllegalStateException("Такой кнопки нет")
             }
-            presenter.counterClick(type)
+            presenter?.counterClick(type)
         }
 
         vb?.btnCounter1?.setOnClickListener(listener)
