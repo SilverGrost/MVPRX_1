@@ -1,10 +1,10 @@
 package ru.silcomsoft.mvprx_1.presenter
 
-import ru.silcomsoft.mvprx_1.view.MainView
+import ru.silcomsoft.mvprx_1.view.IMainView
 import ru.silcomsoft.mvprx_1.R
 import ru.silcomsoft.mvprx_1.model.CountersModel
 
-class MainPresenter(private val view: MainView)  {
+class MainPresenter(private val viewI: IMainView)  {
     private val model = CountersModel()
 
     //Архитектурная ошибка. В качестве практического задания -- исправить
@@ -12,15 +12,15 @@ class MainPresenter(private val view: MainView)  {
         when(id){
             R.id.btn_counter1 -> {
                 val nextValue = model.next(0)
-                view.setButtonText(0, nextValue.toString())
+                viewI.setButtonText(0, nextValue.toString())
             }
             R.id.btn_counter2 -> {
                 val nextValue = model.next(1)
-                view.setButtonText(1, nextValue.toString())
+                viewI.setButtonText(1, nextValue.toString())
             }
             R.id.btn_counter3 -> {
                 val nextValue = model.next(2)
-                view.setButtonText(2, nextValue.toString())
+                viewI.setButtonText(2, nextValue.toString())
             }
         }
     }

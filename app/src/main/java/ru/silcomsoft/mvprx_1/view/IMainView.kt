@@ -1,5 +1,5 @@
 package ru.silcomsoft.mvprx_1.view
 
-interface MainView {
+interface IMainView {
     fun setButtonText(index: Int, text: String)
 }

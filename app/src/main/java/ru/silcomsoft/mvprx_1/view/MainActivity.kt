@@ -6,7 +6,7 @@ import android.view.View
 import ru.silcomsoft.mvprx_1.databinding.ActivityMainBinding
 import ru.silcomsoft.mvprx_1.presenter.MainPresenter
 
-class MainActivity : AppCompatActivity(), MainView {
+class MainActivity : AppCompatActivity(), IMainView {
 
     private var vb: ActivityMainBinding? = null
     private val presenter = MainPresenter(this)
