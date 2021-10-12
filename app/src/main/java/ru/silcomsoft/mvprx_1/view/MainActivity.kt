@@ -2,9 +2,12 @@ package ru.silcomsoft.mvprx_1.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import ru.silcomsoft.mvprx_1.R
 import ru.silcomsoft.mvprx_1.databinding.ActivityMainBinding
 import ru.silcomsoft.mvprx_1.presenter.CounterType
 import ru.silcomsoft.mvprx_1.presenter.MainPresenter
+import java.lang.IllegalStateException
 
 class MainActivity : AppCompatActivity(), IMainView {
 
@@ -16,12 +19,19 @@ class MainActivity : AppCompatActivity(), IMainView {
         vb = ActivityMainBinding.inflate(layoutInflater)
         setContentView(vb?.root)
 
-        val function: (CounterType) -> Unit =
-            { counterType: CounterType -> presenter.counterClick(counterType) }
+        val listener = View.OnClickListener {
+            val type = when (it.id) {
+                R.id.btn_counter1 -> CounterType.FIRST
+                R.id.btn_counter2 -> CounterType.SECOND
+                R.id.btn_counter3 -> CounterType.THIRD
+                else -> throw IllegalStateException("Такой кнопки нет")
+            }
+            presenter.counterClick(type)
+        }
 
-        vb?.btnCounter1?.setOnClickListener { function(CounterType.FIRST) }
-        vb?.btnCounter2?.setOnClickListener { function(CounterType.SECOND) }
-        vb?.btnCounter3?.setOnClickListener { function(CounterType.THIRD) }
+        vb?.btnCounter1?.setOnClickListener(listener)
+        vb?.btnCounter2?.setOnClickListener(listener)
+        vb?.btnCounter3?.setOnClickListener(listener)
     }
 
     //Подсказка к ПЗ: поделить на 3 отдельные функции и избавиться от index
