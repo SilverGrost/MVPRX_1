@@ -35,11 +35,11 @@ class MainActivity : AppCompatActivity(), IMainView {
     }
 
     //Подсказка к ПЗ: поделить на 3 отдельные функции и избавиться от index
-    override fun setButtonText(index: Int, text: String) {
-        when (index) {
-            0 -> vb?.btnCounter1?.text = text
-            1 -> vb?.btnCounter2?.text = text
-            2 -> vb?.btnCounter3?.text = text
+    override fun setButtonText(type: CounterType, text: String) {
+        when (type) {
+            CounterType.FIRST -> vb?.btnCounter1?.text = text
+            CounterType.SECOND -> vb?.btnCounter2?.text = text
+            CounterType.THIRD -> vb?.btnCounter3?.text = text
         }
     }
 }

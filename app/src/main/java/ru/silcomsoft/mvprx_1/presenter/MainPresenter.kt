@@ -1,30 +1,20 @@
 package ru.silcomsoft.mvprx_1.presenter
 
 import ru.silcomsoft.mvprx_1.view.IMainView
-import ru.silcomsoft.mvprx_1.R
 import ru.silcomsoft.mvprx_1.model.CountersModel
 
-class MainPresenter(private val viewI: IMainView)  {
+class MainPresenter(private val viewI: IMainView) {
     private val model = CountersModel()
 
     //Архитектурная ошибка. В качестве практического задания -- исправить
-    fun counterClick(type: CounterType){
-        when(type){
-            CounterType.FIRST -> {
-                val nextValue = model.next(0)
-                viewI.setButtonText(0, nextValue.toString())
-            }
-            CounterType.SECOND -> {
-                val nextValue = model.next(1)
-                viewI.setButtonText(1, nextValue.toString())
-            }
-            CounterType.THIRD -> {
-                val nextValue = model.next(2)
-                viewI.setButtonText(2, nextValue.toString())
-            }
+    fun counterClick(type: CounterType) {
+        val dataFromModel = when (type) {
+            CounterType.FIRST -> model.next(0)
+            CounterType.SECOND -> model.next(1)
+            CounterType.THIRD -> model.next(2)
         }
+        viewI.setButtonText(type, dataFromModel.toString())
     }
-
 }
 
 enum class CounterType {
