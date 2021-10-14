@@ -12,7 +12,7 @@ import java.lang.IllegalStateException
 
 class MainActivity : AppCompatActivity(), IMainView {
 
-    private var vb: ActivityMainBinding? = null
+    private var activityMainBinding: ActivityMainBinding? = null
     private var presenter: MainPresenter? = null
 
     override fun onStop() {
@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity(), IMainView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vb = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(vb?.root)
+        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(activityMainBinding?.root)
 
         val listener = View.OnClickListener { view ->
             val type = when (view.id) {
@@ -40,17 +40,17 @@ class MainActivity : AppCompatActivity(), IMainView {
             presenter?.counterClick(type)
         }
 
-        vb?.btnCounter1?.setOnClickListener(listener)
-        vb?.btnCounter2?.setOnClickListener(listener)
-        vb?.btnCounter3?.setOnClickListener(listener)
+        activityMainBinding?.btnCounter1?.setOnClickListener(listener)
+        activityMainBinding?.btnCounter2?.setOnClickListener(listener)
+        activityMainBinding?.btnCounter3?.setOnClickListener(listener)
     }
 
     //Подсказка к ПЗ: поделить на 3 отдельные функции и избавиться от index
     override fun setButtonText(type: CounterType, text: String) {
         when (type) {
-            CounterType.FIRST -> vb?.btnCounter1?.text = text
-            CounterType.SECOND -> vb?.btnCounter2?.text = text
-            CounterType.THIRD -> vb?.btnCounter3?.text = text
+            CounterType.FIRST -> activityMainBinding?.btnCounter1?.text = text
+            CounterType.SECOND -> activityMainBinding?.btnCounter2?.text = text
+            CounterType.THIRD -> activityMainBinding?.btnCounter3?.text = text
         }
     }
 }
