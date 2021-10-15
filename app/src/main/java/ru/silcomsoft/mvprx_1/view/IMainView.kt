@@ -1,8 +1,16 @@
 package ru.silcomsoft.mvprx_1.view
 
-import ru.silcomsoft.mvprx_1.presenter.CounterType
+import moxy.MvpView
+import moxy.viewstate.strategy.AddToEndSingleStrategy
+import moxy.viewstate.strategy.StateStrategyType
 
-interface IMainView {
-    fun setButtonText(type: CounterType, text: String)
+@StateStrategyType(AddToEndSingleStrategy::class)
+interface IMainView: MvpView {
+    fun setButtonText1(text: String)
+    fun setButtonText2(text: String)
+    fun setButtonText3(text: String)
 }
+
+
+
 

@@ -1,56 +1,37 @@
 package ru.silcomsoft.mvprx_1.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import ru.silcomsoft.mvprx_1.R
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
 import ru.silcomsoft.mvprx_1.databinding.ActivityMainBinding
-import ru.silcomsoft.mvprx_1.presenter.CounterType
+import ru.silcomsoft.mvprx_1.model.CountersModel
 import ru.silcomsoft.mvprx_1.presenter.MainPresenter
 import ru.silcomsoft.mvprx_1.view.IMainView
-import java.lang.IllegalStateException
 
-class MainActivity : AppCompatActivity(), IMainView {
+class MainActivity : MvpAppCompatActivity(), IMainView {
 
-    private var activityMainBinding: ActivityMainBinding? = null
-    private var presenter: MainPresenter? = null
-
-    override fun onStop() {
-        presenter = null
-        super.onStop()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        presenter = MainPresenter(this)
-    }
+    private lateinit var activityMainBinding: ActivityMainBinding
+    private val presenter by moxyPresenter {MainPresenter(CountersModel())}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(activityMainBinding?.root)
+        setContentView(activityMainBinding.root)
 
-        val listener = View.OnClickListener { view ->
-            val type = when (view.id) {
-                R.id.btn_counter1 -> CounterType.FIRST
-                R.id.btn_counter2 -> CounterType.SECOND
-                R.id.btn_counter3 -> CounterType.THIRD
-                else -> throw IllegalStateException("Такой кнопки нет")
-            }
-            presenter?.counterClick(type)
-        }
-
-        activityMainBinding?.btnCounter1?.setOnClickListener(listener)
-        activityMainBinding?.btnCounter2?.setOnClickListener(listener)
-        activityMainBinding?.btnCounter3?.setOnClickListener(listener)
+        activityMainBinding.btnCounter1.setOnClickListener { presenter.setButtonText1()}
+        activityMainBinding.btnCounter2.setOnClickListener { presenter.setButtonText2()}
+        activityMainBinding.btnCounter3.setOnClickListener { presenter.setButtonText3()}
     }
 
-    //Подсказка к ПЗ: поделить на 3 отдельные функции и избавиться от index
-    override fun setButtonText(type: CounterType, text: String) {
-        when (type) {
-            CounterType.FIRST -> activityMainBinding?.btnCounter1?.text = text
-            CounterType.SECOND -> activityMainBinding?.btnCounter2?.text = text
-            CounterType.THIRD -> activityMainBinding?.btnCounter3?.text = text
-        }
+    override fun setButtonText1(text: String) {
+        activityMainBinding.btnCounter1.text = text
+    }
+
+    override fun setButtonText2(text: String) {
+        activityMainBinding.btnCounter2.text = text
+    }
+
+    override fun setButtonText3(text: String) {
+        activityMainBinding.btnCounter3.text = text
     }
 }
