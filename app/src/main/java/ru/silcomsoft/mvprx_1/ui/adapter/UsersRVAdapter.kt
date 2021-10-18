@@ -1,11 +1,11 @@
-package ru.silcomsoft.mvprx_1.ui
+package ru.silcomsoft.mvprx_1.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.silcomsoft.mvprx_1.databinding.ItemUserBinding
 import ru.silcomsoft.mvprx_1.view.IUserItemView
-import ru.silcomsoft.mvprx_1.presenter.IUserListPresenter
+import ru.silcomsoft.mvprx_1.domain.presenter.user_list.IUserListPresenter
 
 class UsersRVAdapter(private val presenter: IUserListPresenter) :
     RecyclerView.Adapter<UsersRVAdapter.ViewHolder>()
