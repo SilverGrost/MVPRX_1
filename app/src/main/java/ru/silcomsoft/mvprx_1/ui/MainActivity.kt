@@ -1,56 +1,49 @@
 package ru.silcomsoft.mvprx_1.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import com.github.terrakok.cicerone.androidx.AppNavigator
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
+import ru.silcomsoft.mvprx_1.App
 import ru.silcomsoft.mvprx_1.R
 import ru.silcomsoft.mvprx_1.databinding.ActivityMainBinding
-import ru.silcomsoft.mvprx_1.presenter.CounterType
-import ru.silcomsoft.mvprx_1.presenter.MainPresenter
+import ru.silcomsoft.mvprx_1.domain.presenter.main.MainPresenter
+import ru.silcomsoft.mvprx_1.ui.screens.Screens
+import ru.silcomsoft.mvprx_1.ui.util.IBackButtonListener
 import ru.silcomsoft.mvprx_1.view.IMainView
-import java.lang.IllegalStateException
 
-class MainActivity : AppCompatActivity(), IMainView {
+class MainActivity : MvpAppCompatActivity(), IMainView {
 
-    private var activityMainBinding: ActivityMainBinding? = null
-    private var presenter: MainPresenter? = null
+    private val navigator = AppNavigator(this, R.id.container
+    )
+    private lateinit var activityMainBinding: ActivityMainBinding
 
-    override fun onStop() {
-        presenter = null
-        super.onStop()
-    }
+    private val presenter by moxyPresenter { MainPresenter(App.instance.router, Screens()) }
 
-    override fun onStart() {
-        super.onStart()
-        presenter = MainPresenter(this)
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(activityMainBinding?.root)
-
-        val listener = View.OnClickListener { view ->
-            val type = when (view.id) {
-                R.id.btn_counter1 -> CounterType.FIRST
-                R.id.btn_counter2 -> CounterType.SECOND
-                R.id.btn_counter3 -> CounterType.THIRD
-                else -> throw IllegalStateException("Такой кнопки нет")
-            }
-            presenter?.counterClick(type)
-        }
-
-        activityMainBinding?.btnCounter1?.setOnClickListener(listener)
-        activityMainBinding?.btnCounter2?.setOnClickListener(listener)
-        activityMainBinding?.btnCounter3?.setOnClickListener(listener)
+        setContentView(activityMainBinding.root)
     }
 
-    //Подсказка к ПЗ: поделить на 3 отдельные функции и избавиться от index
-    override fun setButtonText(type: CounterType, text: String) {
-        when (type) {
-            CounterType.FIRST -> activityMainBinding?.btnCounter1?.text = text
-            CounterType.SECOND -> activityMainBinding?.btnCounter2?.text = text
-            CounterType.THIRD -> activityMainBinding?.btnCounter3?.text = text
+    override fun onResumeFragments() {
+        super.onResumeFragments()
+        App.instance.navigatorHolder.setNavigator(navigator)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        App.instance.navigatorHolder.removeNavigator()
+    }
+
+    override fun onBackPressed() {
+        supportFragmentManager.fragments.forEach {
+            if (it is IBackButtonListener && it.backPressed()){
+                return
+            }
         }
+        presenter.backClicked()
     }
 }
