@@ -1,7 +1,11 @@
 package ru.silcomsoft.mvprx_1.domain.presenter.user_list
 
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.Disposable
 import moxy.MvpPresenter
+import ru.silcomsoft.mvprx_1.domain.model.GithubUser
 import ru.silcomsoft.mvprx_1.domain.repository.GithubUsersRepo
 import ru.silcomsoft.mvprx_1.ui.screens.IScreens
 import ru.silcomsoft.mvprx_1.view.IUserListView
@@ -17,7 +21,8 @@ class ScreenUserListPresenter(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init()
-        loadData()
+        Data().makeLoadData()
+        viewState.updateList()
 
         userListPresenter.itemClickListener = { itemView ->
             val user = userListPresenter.users[itemView.pos]
@@ -25,14 +30,47 @@ class ScreenUserListPresenter(
         }
     }
 
-    private fun loadData() {
-        val users = githubUsersRepository.getUsers()
-        userListPresenter.users.addAll(users)
-        viewState.updateList()
-    }
-
     fun backPressed(): Boolean {
         router.exit()
         return true
     }
+
+    inner class Data {
+        fun makeLoadData() = Consumer(Producer()).execFromIterable()
+    }
+
+    inner class Producer {
+        fun fromIterable(): Observable<GithubUser> =
+            Observable.fromIterable(githubUsersRepository.getUsers())
+    }
+
+    inner class Consumer(private val producer: Producer) {
+        private val githubUserObserver = object : Observer<GithubUser> {
+            var disposable: Disposable? = null
+
+            override fun onSubscribe(d: Disposable?) {
+                disposable = d
+                println("onSubscribe")
+            }
+
+            override fun onNext(s: GithubUser?) {
+                println("onNext: $s")
+                s?.let { userListPresenter.users.add(it) }
+            }
+
+            override fun onError(e: Throwable?) {
+                println("onError: ${e?.message}")
+            }
+
+            override fun onComplete() {
+                println("onComplete")
+            }
+        }
+
+        fun execFromIterable() {
+            producer.fromIterable().subscribe(githubUserObserver)
+        }
+    }
+
+
 }
