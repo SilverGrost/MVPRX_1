@@ -48,18 +48,18 @@ class ScreenUserListPresenter(
         private val githubUserObserver = object : Observer<GithubUser> {
             var disposable: Disposable? = null
 
-            override fun onSubscribe(d: Disposable?) {
-                disposable = d
+            override fun onSubscribe(disposableOnSubscribe: Disposable?) {
+                disposable = disposableOnSubscribe
                 println("onSubscribe")
             }
 
-            override fun onNext(s: GithubUser?) {
-                println("onNext: $s")
-                s?.let { userListPresenter.users.add(it) }
+            override fun onNext(githubUser: GithubUser?) {
+                println("onNext: $githubUser")
+                githubUser?.let { userListPresenter.users.add(it) }
             }
 
-            override fun onError(e: Throwable?) {
-                println("onError: ${e?.message}")
+            override fun onError(throwable: Throwable?) {
+                println("onError: ${throwable?.message}")
             }
 
             override fun onComplete() {
