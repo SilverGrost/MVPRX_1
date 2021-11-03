@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import ru.silcomsoft.mvprx_1.App
 import ru.silcomsoft.mvprx_1.databinding.FragmentUserListBinding
+import ru.silcomsoft.mvprx_1.domain.model.retrofit.ApiHolder
+import ru.silcomsoft.mvprx_1.domain.model.retrofit.RetrofitGithubUsersRepo
 import ru.silcomsoft.mvprx_1.domain.presenter.user_list.ScreenUserListPresenter
 import ru.silcomsoft.mvprx_1.domain.repository.GithubUsersRepo
 import ru.silcomsoft.mvprx_1.ui.adapter.UsersRVAdapter
@@ -23,11 +26,17 @@ class UserListFragment : MvpAppCompatFragment(), IUserListView, IBackButtonListe
     }
 
     private val screenUserListPresenter: ScreenUserListPresenter by moxyPresenter {
-        ScreenUserListPresenter(GithubUsersRepo(), App.instance.router, Screens())
+        ScreenUserListPresenter(
+            AndroidSchedulers.mainThread(),
+            RetrofitGithubUsersRepo(ApiHolder.api),
+            App.instance.router,
+            Screens()
+        )
     }
 
     private var adapter: UsersRVAdapter? = null
     private var fragmentUserListBinding: FragmentUserListBinding? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,7 +51,7 @@ class UserListFragment : MvpAppCompatFragment(), IUserListView, IBackButtonListe
 
     override fun init() {
         fragmentUserListBinding?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(screenUserListPresenter.userListPresenter)
+        adapter = UsersRVAdapter(screenUserListPresenter.usersListPresenter)
         fragmentUserListBinding?.rvUsers?.adapter = adapter
     }
 

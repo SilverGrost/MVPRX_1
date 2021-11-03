@@ -3,7 +3,7 @@ package ru.silcomsoft.mvprx_1.domain.presenter.user_list
 import ru.silcomsoft.mvprx_1.domain.model.GithubUser
 import ru.silcomsoft.mvprx_1.view.IUserItemView
 
-class UserListPresenter : IUserListPresenter {
+class UsersListPresenter : IUserListPresenter {
 
     val users = mutableListOf<GithubUser>()
 
@@ -13,6 +13,6 @@ class UserListPresenter : IUserListPresenter {
 
     override fun bindView(view: IUserItemView) {
         val user = users[view.pos]
-        view.setLogin(user.login)
+        user.login?.let { view.setLogin(it) }
     }
 }

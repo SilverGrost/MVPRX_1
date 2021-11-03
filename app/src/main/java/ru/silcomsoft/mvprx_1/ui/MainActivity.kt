@@ -18,7 +18,9 @@ class MainActivity : MvpAppCompatActivity(), IMainView {
     )
     private lateinit var activityMainBinding: ActivityMainBinding
 
-    private val presenter by moxyPresenter { MainPresenter(App.instance.router, Screens()) }
+    private val presenter by moxyPresenter {
+        MainPresenter(App.instance.router, Screens())
+    }
 
 
 
