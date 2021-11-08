@@ -6,10 +6,10 @@ import ru.silcomsoft.mvprx_1.domain.model.GithubUser
 import java.io.IOException
 
 class GithubUsersRepo {
-    private val repositories =
-        (0..100).map { GithubUser("user$it") }
+    /*private val repositories =
+        (0..100).map { GithubUser("user$it") }*/
 
-    private val bs = BehaviorSubject.create<List<GithubUser>>()
+    /*private val bs = BehaviorSubject.create<List<GithubUser>>()
     fun getUsers(): List<GithubUser> {
         client
             .newCall(Request.Builder().url("https://api.github.com/users").build())
@@ -24,7 +24,7 @@ class GithubUsersRepo {
 
         })
         return repositories
-    }
+    }*/
 
     val client = OkHttpClient.Builder().build()
 }

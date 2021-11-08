@@ -11,9 +11,9 @@ import moxy.ktx.moxyPresenter
 import ru.silcomsoft.mvprx_1.App
 import ru.silcomsoft.mvprx_1.databinding.FragmentUserListBinding
 import ru.silcomsoft.mvprx_1.domain.model.retrofit.ApiHolder
-import ru.silcomsoft.mvprx_1.domain.model.retrofit.RetrofitGithubUsersRepo
+import ru.silcomsoft.mvprx_1.domain.model.retrofit.users.GlideImageLoader
+import ru.silcomsoft.mvprx_1.domain.model.retrofit.users.RetrofitGithubUsersRepo
 import ru.silcomsoft.mvprx_1.domain.presenter.user_list.ScreenUserListPresenter
-import ru.silcomsoft.mvprx_1.domain.repository.GithubUsersRepo
 import ru.silcomsoft.mvprx_1.ui.adapter.UsersRVAdapter
 import ru.silcomsoft.mvprx_1.ui.screens.Screens
 import ru.silcomsoft.mvprx_1.ui.util.IBackButtonListener
@@ -51,7 +51,7 @@ class UserListFragment : MvpAppCompatFragment(), IUserListView, IBackButtonListe
 
     override fun init() {
         fragmentUserListBinding?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(screenUserListPresenter.usersListPresenter)
+        adapter = UsersRVAdapter(screenUserListPresenter.usersListPresenter, GlideImageLoader())
         fragmentUserListBinding?.rvUsers?.adapter = adapter
     }
 

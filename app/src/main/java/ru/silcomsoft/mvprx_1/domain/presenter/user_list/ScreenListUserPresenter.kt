@@ -3,7 +3,7 @@ package ru.silcomsoft.mvprx_1.domain.presenter.user_list
 import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.core.Scheduler
 import moxy.MvpPresenter
-import ru.silcomsoft.mvprx_1.domain.model.retrofit.IGithubUsersRepo
+import ru.silcomsoft.mvprx_1.domain.model.retrofit.users.IGithubUsersRepo
 import ru.silcomsoft.mvprx_1.ui.screens.IScreens
 import ru.silcomsoft.mvprx_1.view.IUserListView
 
