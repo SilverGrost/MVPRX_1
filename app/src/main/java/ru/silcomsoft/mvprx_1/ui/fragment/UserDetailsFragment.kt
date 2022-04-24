@@ -18,7 +18,9 @@ class UserDetailsFragment : MvpAppCompatFragment(), IUserDetailsView, IBackButto
     companion object {
         fun newInstance(gitHubUser: GithubUser): UserDetailsFragment{
 
-            val args = Bundle().apply { putParcelable(USER_DETAILS, gitHubUser) }
+            val args = Bundle().apply {
+                putParcelable(USER_DETAILS, gitHubUser)
+            }
             val fragment = UserDetailsFragment()
 
             fragment.arguments = args
